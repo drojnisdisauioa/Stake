@@ -81,13 +81,11 @@ Tampermonkey lets you run custom scripts automatically on websites.
 
 3. Click **“Create a new script”**.
 
-4. Remove the default code, and **paste this instead**:
+4. Remove the default code, and **paste the code from this link instead**:
 
    ```
-   https://raw.githubusercontent.com/drojnisdisauioa/Stake/refs/heads/main/tampermonkey.js
+   https://github.com/drojnisdisauioa/Stake/refs/heads/main/tampermonkey.js
    ```
-
-   (Or fetch it manually and paste the contents.)
 
 5. Hit **File → Save** (or Ctrl+S).
 

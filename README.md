@@ -74,7 +74,7 @@ Tampermonkey lets you run custom scripts automatically on websites.
 
 1. **Install Tampermonkey** if you haven’t already:
 
-   * Go to: [https://www.tampermonkey.net/](https://www.tampermonkey.net/)
+   * Go to: [TamperMonkey](https://www.tampermonkey.net/)
    * Choose your browser and click **Install**.
 
 2. After it's installed, click the **Tampermonkey icon** (usually in the top right of your browser) and select **“Dashboard”**.
@@ -84,7 +84,7 @@ Tampermonkey lets you run custom scripts automatically on websites.
 4. Remove the default code, and **paste the code from this link instead**:
 
    ```
-   https://github.com/drojnisdisauioa/Stake/blob/main/tampermonkey.js
+   [View Code](https://github.com/drojnisdisauioa/Stake/blob/main/tampermonkey.js)
    ```
 
 5. Hit **File → Save** (or Ctrl+S).

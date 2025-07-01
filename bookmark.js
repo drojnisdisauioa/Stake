@@ -55,7 +55,7 @@
     const observer = new MutationObserver(muts => {
       const elements = getElements();
       muts.forEach(m => {
-        if (m.type === 'characterData' && m.target.nodeValue.includes('ARS') && !shouldSkip(m.target, elements)) {
+        if (m.type === 'characterData' && m.target.nodeValue.includes('₫') && !shouldSkip(m.target, elements)) {
           m.target.nodeValue = m.target.nodeValue.replace(/ARS[\s\u00A0]*/g, isUSDElement(m.target, elements) ? 'USD' : '$');
         }
       });

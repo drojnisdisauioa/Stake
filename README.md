@@ -21,7 +21,7 @@ This method works great on **Chrome, Firefox, Edge**, etc.
 2. **Create a new bookmark**:
 
    * On **Chrome/Firefox**: Right-click your bookmarks bar → click **"Add Page"** or **"Add Bookmark"**.
-   * Give it a name like `💸 Conetic Larp`.
+   * Give it a name like `💸 Larp`.
 
 3. **Paste the code** into the **URL or Location** field.
 
@@ -49,7 +49,7 @@ This method works on **iPhones or iPads** using Safari.
 
 4. Scroll down and tap **“Add Bookmark”**.
 
-5. Name it something like `Conetic Larp` and tap **Save**.
+5. Name it something like `Larp` and tap **Save**.
 
 6. Now go to **Bookmarks** (the book icon) and **edit** the one you just saved.
 

@@ -13,7 +13,7 @@
   const API = `https://api.coingecko.com/api/v3/simple/price?ids=${Object.values(COINS).join(',')}&vs_currencies=usd`;
   const CONV_SELECTOR = 'span.label-content.svelte-osbo5w.full-width div.crypto[data-testid="conversion-amount"]';
   const prices = {}, originalTexts = new WeakMap();
-
+  
   const getElements = () => ({
     excluded: document.evaluate('/html/body/div[1]/div[1]/div[2]/div[2]/div/div/div/div[4]/div/div[5]/label/span[2]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue,
     usd: ['/html/body/div[1]/div[2]/div[2]/div[4]/div/div/div/div[1]/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div/div[1]/div[2]/div[1]/div/button','/html/body/div[1]/div[2]/div[2]/div[4]/div/div/div/div[1]/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div[4]/div/div/div/button/div'].map(xpath => document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue).filter(Boolean)
@@ -40,21 +40,14 @@
     });
   };
 
-  const replaceCurrencies = () => {
+  const replaceARS = () => {
     const elements = getElements();
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-      acceptNode: n => {
-        if (shouldSkip(n, elements)) return NodeFilter.FILTER_REJECT;
-        if (n.nodeValue.includes('ARS') || n.nodeValue.includes('₫')) return NodeFilter.FILTER_ACCEPT;
-        return NodeFilter.FILTER_REJECT;
-      }
+      acceptNode: n => shouldSkip(n, elements) ? NodeFilter.FILTER_REJECT : n.nodeValue.includes('ARS') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
     });
-
     let node;
     while (node = walker.nextNode()) {
-      node.nodeValue = node.nodeValue
-        .replace(/ARS[\s\u00A0]*/g, isUSDElement(node, elements) ? 'USD' : '$')
-        .replace(/₫[\s\u00A0]*/g, isUSDElement(node, elements) ? 'USD' : '$');
+      node.nodeValue = node.nodeValue.replace(/ARS[\s\u00A0]*/g, isUSDElement(node, elements) ? 'USD' : '$');
     }
   };
 
@@ -62,22 +55,18 @@
     const observer = new MutationObserver(muts => {
       const elements = getElements();
       muts.forEach(m => {
-        if (m.type === 'characterData' && (m.target.nodeValue.includes('ARS') || m.target.nodeValue.includes('₫')) && !shouldSkip(m.target, elements)) {
-          m.target.nodeValue = m.target.nodeValue
-            .replace(/ARS[\s\u00A0]*/g, isUSDElement(m.target, elements) ? 'USD' : '$')
-            .replace(/₫[\s\u00A0]*/g, isUSDElement(m.target, elements) ? 'USD' : '$');
+        if (m.type === 'characterData' && m.target.nodeValue.includes('ARS') && !shouldSkip(m.target, elements)) {
+          m.target.nodeValue = m.target.nodeValue.replace(/ARS[\s\u00A0]*/g, isUSDElement(m.target, elements) ? 'USD' : '$');
         }
       });
     });
 
     const observeNode = node => {
-      if (node.nodeType === Node.TEXT_NODE && (node.nodeValue.includes('ARS') || node.nodeValue.includes('₫'))) {
+      if (node.nodeType === Node.TEXT_NODE && node.nodeValue.includes('ARS')) {
         const elements = getElements();
         if (!shouldSkip(node, elements)) {
           observer.observe(node, { characterData: true });
-          node.nodeValue = node.nodeValue
-            .replace(/ARS[\s\u00A0]*/g, isUSDElement(node, elements) ? 'USD' : '$')
-            .replace(/₫[\s\u00A0]*/g, isUSDElement(node, elements) ? 'USD' : '$');
+          node.nodeValue = node.nodeValue.replace(/ARS[\s\u00A0]*/g, isUSDElement(node, elements) ? 'USD' : '$');
         }
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         [...node.childNodes].forEach(observeNode);
@@ -157,12 +146,12 @@
     await fetchPrices();
     convertAll();
     document.querySelectorAll('input[data-test="input-game-amount"]').forEach(hookInput);
-    replaceCurrencies();
+    replaceARS();
     replacePaths();
     setupTextObserver();
     setupDecimalLogger();
     setInterval(fetchPrices, 60000);
-    setInterval(() => { convertAll(); replaceCurrencies(); }, 1000);
+    setInterval(() => { convertAll(); replaceARS(); }, 1000);
     new MutationObserver(muts => {
       muts.forEach(m => {
         m.addedNodes.forEach(n => {
@@ -172,7 +161,7 @@
           }
         });
       });
-      replaceCurrencies();
+      replaceARS();
       replacePaths();
     }).observe(document.body, { childList: true, subtree: true });
   })();
